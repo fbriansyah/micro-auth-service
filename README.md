@@ -11,7 +11,7 @@ package payment;
 import "proto/session/type/session.proto";
 
 option go_package = 
-  "github.com/fbriansyah/micro-payment-proto/protogen/go/payment";
+  "github.com/fbriansyah/micro-payment-proto/protogen/go/auth";
 
 message LoginRequest {
   string username=1 [json_name="username"];
@@ -21,11 +21,23 @@ message LoginRequest {
 message LoginResponse {
   string userid=1 [json_name="userid"];
   string name=2 [json_name="name"];
-  Session session=3 [json_name="session"];
+  session.Session session=3 [json_name="session"];
+}
+
+message CreateUserRequest {
+  string username=1 [json_name="username"];
+  string password=2 [json_name="password"];
+  string name=3 [json_name="name"];
+}
+
+message CreateUserResponse {
+  string userid=1 [json_name="userid"];
+  string username=2 [json_name="username"];
+  string name=3 [json_name="name"];
 }
 
 service AuthService {
   rpc Login (LoginRequest) returns (LoginResponse);
-  rpc Logout (SessionID) returns (SessionID);
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
 }
 ```
