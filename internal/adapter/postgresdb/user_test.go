@@ -46,7 +46,13 @@ func TestGetUserByUsername(t *testing.T) {
 	require.Equal(t, usr1.ID, usr2.ID)
 	require.Equal(t, usr1.Username, usr2.Username)
 	require.Equal(t, usr1.Fullname, usr2.Fullname)
+}
 
-	err = util.CheckPassword("S3cr3t", usr2.Password)
+func TestGetTestUser(t *testing.T) {
+	usr, err := testQueries.GetUserByUsername(context.Background(), "test")
+	require.NoError(t, err)
+	require.NotEmpty(t, usr)
+
+	err = util.CheckPassword("S3cr3t", usr.Password)
 	require.NoError(t, err)
 }
