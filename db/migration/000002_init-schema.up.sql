@@ -1,5 +1,5 @@
 CREATE TABLE "users" (
-  "id" uuid PRIMARY KEY DEFAULT 'uuid_generate_v4()',
+  "id" uuid PRIMARY KEY DEFAULT (uuid_generate_v4()),
   "fullname" varchar NOT NULL,
   "username" varchar NOT NULL UNIQUE,
   "password" varchar NOT NULL,
