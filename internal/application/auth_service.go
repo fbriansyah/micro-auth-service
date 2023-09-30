@@ -9,21 +9,25 @@ import (
 	dmuser "github.com/fbriansyah/micro-auth-service/internal/application/domain/user"
 	"github.com/fbriansyah/micro-auth-service/internal/port"
 	"github.com/fbriansyah/micro-auth-service/util"
+	"github.com/fbriansyah/micro-payment-proto/protogen/go/session"
 )
 
 var (
 	ErrorWrongPassword        = errors.New("wrong password")
 	ErrorUserNotActive        = errors.New("user is not active")
 	ErrorGenerateHashPassword = errors.New("failed to create password hash")
+	ErrorCreatingSession      = errors.New("failed to create session")
 )
 
 type AuthService struct {
-	db port.DatabasePort
+	db            port.DatabasePort
+	sessionClient port.SessionPort
 }
 
-func NewAuthService(db port.DatabasePort) *AuthService {
+func NewAuthService(db port.DatabasePort, sessionClient port.SessionPort) *AuthService {
 	return &AuthService{
-		db: db,
+		db:            db,
+		sessionClient: sessionClient,
 	}
 }
 
@@ -45,12 +49,26 @@ func (s *AuthService) Login(username, password string) (dmuser.User, error) {
 	}
 
 	// TODO: Call CreateSession from session micro service
+	session, err := s.sessionClient.CreateSession(context.Background(), &session.UserID{
+		UserId: user.ID.String(),
+	})
+
+	if err != nil {
+		return dmuser.User{}, nil
+	}
 
 	return dmuser.User{
 		ID:       user.ID,
 		Username: username,
 		Fullname: user.Fullname,
-		Session:  dmsession.Session{},
+		Session: dmsession.Session{
+			Id:                    session.Id,
+			UserId:                user.ID.String(),
+			AccessToken:           session.AccessToken,
+			RefreshToken:          session.AccessToken,
+			AccessTokenExpiresAt:  session.AccessTokenExpiresAt.String(),
+			RefreshTokenExpiresAt: session.RefreshTokenExpiresAt.String(),
+		},
 	}, nil
 }
 
