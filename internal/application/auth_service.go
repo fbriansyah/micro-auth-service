@@ -5,11 +5,9 @@ import (
 	"errors"
 
 	"github.com/fbriansyah/micro-auth-service/internal/adapter/postgresdb"
-	dmsession "github.com/fbriansyah/micro-auth-service/internal/application/domain/session"
 	dmuser "github.com/fbriansyah/micro-auth-service/internal/application/domain/user"
 	"github.com/fbriansyah/micro-auth-service/internal/port"
 	"github.com/fbriansyah/micro-auth-service/util"
-	"github.com/fbriansyah/micro-payment-proto/protogen/go/session"
 )
 
 var (
@@ -21,10 +19,10 @@ var (
 
 type AuthService struct {
 	db            port.DatabasePort
-	sessionClient port.SessionPort
+	sessionClient port.SessionAdapterPort
 }
 
-func NewAuthService(db port.DatabasePort, sessionClient port.SessionPort) *AuthService {
+func NewAuthService(db port.DatabasePort, sessionClient port.SessionAdapterPort) *AuthService {
 	return &AuthService{
 		db:            db,
 		sessionClient: sessionClient,
@@ -48,10 +46,8 @@ func (s *AuthService) Login(username, password string) (dmuser.User, error) {
 		return dmuser.User{}, ErrorUserNotActive
 	}
 
-	// TODO: Call CreateSession from session micro service
-	session, err := s.sessionClient.CreateSession(context.Background(), &session.UserID{
-		UserId: user.ID.String(),
-	})
+	// Call CreateSession from session micro service
+	session, err := s.sessionClient.CreateSession(user.ID.String())
 
 	if err != nil {
 		return dmuser.User{}, nil
@@ -61,14 +57,7 @@ func (s *AuthService) Login(username, password string) (dmuser.User, error) {
 		ID:       user.ID,
 		Username: username,
 		Fullname: user.Fullname,
-		Session: dmsession.Session{
-			Id:                    session.Id,
-			UserId:                user.ID.String(),
-			AccessToken:           session.AccessToken,
-			RefreshToken:          session.AccessToken,
-			AccessTokenExpiresAt:  session.AccessTokenExpiresAt.String(),
-			RefreshTokenExpiresAt: session.RefreshTokenExpiresAt.String(),
-		},
+		Session:  session,
 	}, nil
 }
 
