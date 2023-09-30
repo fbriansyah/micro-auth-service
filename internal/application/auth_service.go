@@ -52,7 +52,7 @@ func (s *AuthService) Login(username, password string) (dmuser.User, error) {
 	}, nil
 }
 
-// Register is save user to database
+// Register method, save user to database
 func (s *AuthService) Register(user dmuser.User, password string) (dmuser.User, error) {
 	hashedPassword, err := util.HashPassword(password)
 	if err != nil {

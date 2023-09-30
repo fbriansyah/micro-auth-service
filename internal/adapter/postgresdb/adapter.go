@@ -13,6 +13,7 @@ type DatabaseStore struct {
 	*Queries
 }
 
+// NewDatabaseAdapter create postgres database adapter
 func NewDatabaseAdapter(db *sql.DB) DatabaseAdapter {
 	return &DatabaseStore{
 		db:      db,
