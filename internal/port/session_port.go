@@ -11,5 +11,5 @@ type SessionPort interface {
 	CreateSession(ctx context.Context, in *session.UserID, opts ...grpc.CallOption) (*session.Session, error)
 	RefreshToken(ctx context.Context, in *session.SessionID, opts ...grpc.CallOption) (*session.Session, error)
 	DeleteSession(ctx context.Context, in *session.SessionID, opts ...grpc.CallOption) (*session.SessionID, error)
-	GetUserIDFromToken(ctx context.Context, in *session.Token, opts ...grpc.CallOption) (*session.UserID, error)
+	GetPayloadFromToken(ctx context.Context, in *session.Token, opts ...grpc.CallOption) (*session.Payload, error)
 }
