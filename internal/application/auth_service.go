@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/fbriansyah/micro-auth-service/internal/adapter/postgresdb"
+	dmsession "github.com/fbriansyah/micro-auth-service/internal/application/domain/session"
 	dmuser "github.com/fbriansyah/micro-auth-service/internal/application/domain/user"
 	"github.com/fbriansyah/micro-auth-service/internal/port"
 	"github.com/fbriansyah/micro-auth-service/util"
@@ -49,6 +50,7 @@ func (s *AuthService) Login(username, password string) (dmuser.User, error) {
 		ID:       user.ID,
 		Username: username,
 		Fullname: user.Fullname,
+		Session:  dmsession.Session{},
 	}, nil
 }
 
