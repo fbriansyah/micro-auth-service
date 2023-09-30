@@ -34,5 +34,6 @@ func main() {
 
 	authService := application.NewAuthService(databaseAdapter, sessionClient)
 
-	grpcserver.NewGrpcServerAdapter(authService, config.GrpcPort)
+	serverAdapter := grpcserver.NewGrpcServerAdapter(authService, config.GrpcPort)
+	serverAdapter.Run()
 }
