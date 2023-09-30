@@ -30,7 +30,7 @@ sqlc-win:
 	docker run --rm -v ${pwd}:/src -w /src kjconroy/sqlc generate
 
 run:
-	go run ./cmd/main.go
+	go run ./cmd/
 
 build-image:
 	docker build -t efner/auth-microservice:1.0 .
