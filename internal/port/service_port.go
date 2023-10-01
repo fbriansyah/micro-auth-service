@@ -8,8 +8,8 @@ import (
 )
 
 type ServicePort interface {
-	Login(username, password string) (dmuser.User, error)
-	Register(user dmuser.User, password string) (dmuser.User, error)
+	Login(ctx context.Context, username, password string) (dmuser.User, error)
+	Register(ctx context.Context, user dmuser.User, password string) (dmuser.User, error)
 }
 
 type SessionAdapterPort interface {
