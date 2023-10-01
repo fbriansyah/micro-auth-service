@@ -1,0 +1,28 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=db_auth
+  authms:
+    image: efner/auth-microservice:1.0
+    ports:
+      - "9090:9090"
+    environment:
+      - DB_SOURCE=postgresql://root:secret@postgres:5432/db_auth?sslmode=disable
+      - SESSION_SERVER_ADDRESS=sessionms:9090
+    depends_on:
+      - postgres
+      - sessionms
+    entrypoint: "/app/auth-microservice"
+  redis:
+    image: redis:alpine3.18
+  sessionms:
+    image: efner/session-microservice:1.0
+    environment:
+      - REDIS_ADDRESS=redis:6379
+    depends_on:
+      - redis
+    entrypoint: "/app/session-microservice"
