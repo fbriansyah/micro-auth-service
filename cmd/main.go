@@ -8,6 +8,7 @@ import (
 	"github.com/fbriansyah/micro-auth-service/util"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
@@ -22,9 +23,13 @@ func main() {
 	}
 
 	runDBMigration(config.MigrationURL, config.DBSource)
+	var opts []grpc.DialOption
 
 	databaseAdapter := postgresdb.NewDatabaseAdapter(sqlDB)
-	conn, err := grpc.Dial(config.SessionServerAddress, nil)
+
+	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+
+	conn, err := grpc.Dial(config.SessionServerAddress, opts...)
 	if err != nil {
 		log.Fatal().Msgf("cannot connect to session service: %s", err.Error())
 	}
