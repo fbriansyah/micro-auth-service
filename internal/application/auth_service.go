@@ -30,7 +30,7 @@ func NewAuthService(db port.DatabasePort, sessionClient port.SessionAdapterPort)
 }
 
 // Login check username, password and . This method call create session rpc.
-func (s *AuthService) Login(username, password string) (dmuser.User, error) {
+func (s *AuthService) Login(ctx context.Context, username, password string) (dmuser.User, error) {
 
 	user, err := s.db.GetUserByUsername(context.Background(), username)
 	if err != nil {
@@ -62,7 +62,7 @@ func (s *AuthService) Login(username, password string) (dmuser.User, error) {
 }
 
 // Register method, save user to database
-func (s *AuthService) Register(user dmuser.User, password string) (dmuser.User, error) {
+func (s *AuthService) Register(ctx context.Context, user dmuser.User, password string) (dmuser.User, error) {
 	hashedPassword, err := util.HashPassword(password)
 	if err != nil {
 		return dmuser.User{}, ErrorGenerateHashPassword
