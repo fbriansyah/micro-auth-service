@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	dmuser "github.com/fbriansyah/micro-auth-service/internal/application/domain/user"
 	"github.com/fbriansyah/micro-payment-proto/protogen/go/auth"
 	"github.com/fbriansyah/micro-payment-proto/protogen/go/session"
 	"google.golang.org/grpc/codes"
@@ -32,11 +33,26 @@ func (a *GrpcServerAdapter) Login(ctx context.Context, req *auth.LoginRequest) (
 	}, nil
 }
 
-func (a *GrpcServerAdapter) CreateUser(context.Context, *auth.CreateUserRequest) (*auth.CreateUserResponse, error) {
+func (a *GrpcServerAdapter) CreateUser(ctx context.Context, req *auth.CreateUserRequest) (*auth.CreateUserResponse, error) {
+
+	user, err := a.service.Register(
+		ctx,
+		dmuser.User{
+			Username: req.Username,
+			Fullname: req.Name,
+		},
+		req.Password,
+	)
+	if err != nil {
+		return nil, generateError(
+			codes.FailedPrecondition,
+			fmt.Sprintf("error create user: %v", err),
+		)
+	}
 
 	return &auth.CreateUserResponse{
-		Userid:   "",
-		Username: "",
-		Name:     "",
+		Userid:   user.ID.String(),
+		Username: user.Username,
+		Name:     user.Fullname,
 	}, nil
 }
