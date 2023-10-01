@@ -33,7 +33,7 @@ func (a *SessionAdapterClient) CreateSession(ctx context.Context, userID string)
 		Id:                    session.Id,
 		UserId:                userID,
 		AccessToken:           session.AccessToken,
-		RefreshToken:          session.AccessToken,
+		RefreshToken:          session.RefreshToken,
 		AccessTokenExpiresAt:  session.AccessTokenExpiresAt,
 		RefreshTokenExpiresAt: session.RefreshTokenExpiresAt,
 	}, nil
