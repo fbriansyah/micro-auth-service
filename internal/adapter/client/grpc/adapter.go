@@ -20,8 +20,8 @@ func NewSessionAdapterClient(conn *grpc.ClientConn) *SessionAdapterClient {
 }
 
 // CreateSession create rpc call to session micro service
-func (a *SessionAdapterClient) CreateSession(userID string) (dmsession.Session, error) {
-	session, err := a.sessionClient.CreateSession(context.Background(), &session.UserID{
+func (a *SessionAdapterClient) CreateSession(ctx context.Context, userID string) (dmsession.Session, error) {
+	session, err := a.sessionClient.CreateSession(ctx, &session.UserID{
 		UserId: userID,
 	})
 

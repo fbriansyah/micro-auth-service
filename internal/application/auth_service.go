@@ -47,7 +47,7 @@ func (s *AuthService) Login(username, password string) (dmuser.User, error) {
 	}
 
 	// Call CreateSession from session micro service
-	session, err := s.sessionClient.CreateSession(user.ID.String())
+	session, err := s.sessionClient.CreateSession(context.Background(), user.ID.String())
 
 	if err != nil {
 		return dmuser.User{}, nil

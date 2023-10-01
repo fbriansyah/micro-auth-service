@@ -1,6 +1,8 @@
 package port
 
 import (
+	"context"
+
 	dmsession "github.com/fbriansyah/micro-auth-service/internal/application/domain/session"
 	dmuser "github.com/fbriansyah/micro-auth-service/internal/application/domain/user"
 )
@@ -11,5 +13,5 @@ type ServicePort interface {
 }
 
 type SessionAdapterPort interface {
-	CreateSession(userID string) (dmsession.Session, error)
+	CreateSession(ctx context.Context, userID string) (dmsession.Session, error)
 }
