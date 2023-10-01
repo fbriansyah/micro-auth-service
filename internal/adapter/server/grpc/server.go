@@ -7,7 +7,10 @@ import (
 
 	"github.com/fbriansyah/micro-auth-service/internal/port"
 	"github.com/fbriansyah/micro-payment-proto/protogen/go/auth"
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type GrpcServerAdapter struct {
@@ -49,4 +52,10 @@ func (a *GrpcServerAdapter) Run() {
 // Stop the grpc server
 func (a *GrpcServerAdapter) Stop() {
 	a.server.Stop()
+}
+
+func generateError(code codes.Code, msg string) error {
+	s := status.New(code, msg)
+	s, _ = s.WithDetails(&errdetails.ErrorInfo{})
+	return s.Err()
 }
