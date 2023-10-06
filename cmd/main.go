@@ -35,7 +35,7 @@ func main() {
 	}
 	defer conn.Close()
 
-	sessionClient := grpcclient.NewSessionAdapterClient(conn)
+	sessionClient := grpcclient.NewSessionClientAdapter(conn)
 
 	authService := application.NewAuthService(databaseAdapter, sessionClient)
 

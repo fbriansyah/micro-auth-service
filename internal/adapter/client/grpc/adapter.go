@@ -9,18 +9,18 @@ import (
 	"google.golang.org/grpc"
 )
 
-type SessionAdapterClient struct {
+type SessionClientAdapter struct {
 	sessionClient port.SessionPort
 }
 
-func NewSessionAdapterClient(conn *grpc.ClientConn) *SessionAdapterClient {
+func NewSessionClientAdapter(conn *grpc.ClientConn) *SessionClientAdapter {
 	client := session.NewSessionServiceClient(conn)
 
-	return &SessionAdapterClient{sessionClient: client}
+	return &SessionClientAdapter{sessionClient: client}
 }
 
 // CreateSession create rpc call to session micro service
-func (a *SessionAdapterClient) CreateSession(ctx context.Context, userID string) (dmsession.Session, error) {
+func (a *SessionClientAdapter) CreateSession(ctx context.Context, userID string) (dmsession.Session, error) {
 	session, err := a.sessionClient.CreateSession(ctx, &session.UserID{
 		UserId: userID,
 	})
