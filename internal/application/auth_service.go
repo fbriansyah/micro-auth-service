@@ -46,18 +46,10 @@ func (s *AuthService) Login(ctx context.Context, username, password string) (dmu
 		return dmuser.User{}, ErrorUserNotActive
 	}
 
-	// Call CreateSession from session micro service
-	session, err := s.sessionClient.CreateSession(context.Background(), user.ID.String())
-
-	if err != nil {
-		return dmuser.User{}, nil
-	}
-
 	return dmuser.User{
 		ID:       user.ID,
 		Username: username,
 		Fullname: user.Fullname,
-		Session:  session,
 	}, nil
 }
 

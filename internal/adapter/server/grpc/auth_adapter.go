@@ -6,7 +6,6 @@ import (
 
 	dmuser "github.com/fbriansyah/micro-auth-service/internal/application/domain/user"
 	"github.com/fbriansyah/micro-payment-proto/protogen/go/auth"
-	"github.com/fbriansyah/micro-payment-proto/protogen/go/session"
 	"google.golang.org/grpc/codes"
 )
 
@@ -22,14 +21,6 @@ func (a *GrpcServerAdapter) Login(ctx context.Context, req *auth.LoginRequest) (
 	return &auth.LoginResponse{
 		Userid: user.ID.String(),
 		Name:   user.Fullname,
-		Session: &session.Session{
-			Id:                    user.Session.Id,
-			UserId:                user.ID.String(),
-			AccessToken:           user.Session.AccessToken,
-			RefreshToken:          user.Session.RefreshToken,
-			AccessTokenExpiresAt:  user.Session.AccessTokenExpiresAt,
-			RefreshTokenExpiresAt: user.Session.RefreshTokenExpiresAt,
-		},
 	}, nil
 }
 
