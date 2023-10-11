@@ -35,4 +35,7 @@ run:
 build-image:
 	docker build -t efner/auth-microservice:1.0 .
 
-.PHONY: postgres createdb migrateup migrateup1 migratedown migratedown1 new_migration re-db run build-image
+deploy: build-image
+	docker push efner/auth-microservice:1.0
+
+.PHONY: postgres createdb migrateup migrateup1 migratedown migratedown1 new_migration re-db run build-image deploy
