@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
+// Login method is implementation of rpc Login in AuthService. It calls Login method in service
 func (a *GrpcServerAdapter) Login(ctx context.Context, req *auth.LoginRequest) (*auth.LoginResponse, error) {
 	user, err := a.service.Login(ctx, req.Username, req.Password)
 	if err != nil {
@@ -24,8 +25,8 @@ func (a *GrpcServerAdapter) Login(ctx context.Context, req *auth.LoginRequest) (
 	}, nil
 }
 
+// CreateUser is implementation of rpc CreateUser in AuthService. It calls Register methon in service
 func (a *GrpcServerAdapter) CreateUser(ctx context.Context, req *auth.CreateUserRequest) (*auth.CreateUserResponse, error) {
-
 	user, err := a.service.Register(
 		ctx,
 		dmuser.User{

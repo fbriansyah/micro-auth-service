@@ -29,9 +29,8 @@ func NewAuthService(db port.DatabasePort, sessionClient port.SessionAdapterPort)
 	}
 }
 
-// Login check username, password and . This method call create session rpc.
+// Login check username, password and isActive to database.
 func (s *AuthService) Login(ctx context.Context, username, password string) (dmuser.User, error) {
-
 	user, err := s.db.GetUserByUsername(context.Background(), username)
 	if err != nil {
 		return dmuser.User{}, err
